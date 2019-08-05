@@ -133,6 +133,8 @@ var (
 		wktDirectlyImportedLinter,
 		wktDurationSuffixLinter,
 		wktTimestampSuffixLinter,
+		commentsAllLinter,
+		fileOptionsGoPackagePrefixLinter,
 	}
 
 	// DefaultLinters is the slice of default Linters.
