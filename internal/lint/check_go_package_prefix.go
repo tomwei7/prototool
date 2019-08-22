@@ -3,6 +3,7 @@ package lint
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/emicklei/proto"
@@ -24,10 +25,12 @@ func checkFileOptionsGoPackagePrefix(add func(*text.Failure), dirPath string, de
 type fileOptionsGoPackagePrefixVisitor struct {
 	baseAddVisitor
 
-	option *proto.Option
+	option   *proto.Option
+	fileName string
 }
 
 func (v *fileOptionsGoPackagePrefixVisitor) OnStart(descriptor *FileDescriptor) error {
+	v.fileName = descriptor.Filename
 	v.option = nil
 	return nil
 }
@@ -40,6 +43,7 @@ func (v *fileOptionsGoPackagePrefixVisitor) VisitOption(element *proto.Option) {
 
 func (v *fileOptionsGoPackagePrefixVisitor) Finally() error {
 	if v.option == nil {
+		v.AddFailuref(v.option.Position, `Option "go_package not exists"`)
 		return nil
 	}
 	value := v.option.Constant.Source
@@ -47,8 +51,9 @@ func (v *fileOptionsGoPackagePrefixVisitor) Finally() error {
 	if v := os.Getenv("PROTO_GO_PACKAGE_PREFIX"); v != "" {
 		prefix = v
 	}
+	prefix = prefix + "/" + filepath.Dir(v.fileName)
 	if !strings.HasPrefix(value, prefix) {
-		v.AddFailuref(v.option.Position, `Option "go_package" must has prefix: %s`, prefix)
+		v.AddFailuref(v.option.Position, `Expect option "go_package" as: "%s[;package_name]" actual: "%s"`, prefix, value)
 	}
 	return nil
 }

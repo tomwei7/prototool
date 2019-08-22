@@ -89,6 +89,7 @@ var (
 		messageFieldsHaveSentenceCommentsLinter,
 		messageFieldsNotFloatsLinter,
 		messageFieldsNoJSONNameLinter,
+		messageFieldsJSONNameLinter,
 		messageFieldsTimeLinter,
 		messageFieldNamesFilenameLinter,
 		messageFieldNamesFilepathLinter,
