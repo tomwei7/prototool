@@ -21,6 +21,8 @@
 package lint
 
 import (
+	"strings"
+
 	"github.com/emicklei/proto"
 	"github.com/uber/prototool/internal/text"
 )
@@ -66,12 +68,17 @@ func (v messageFieldsJSONNameVisitor) VisitMapField(field *proto.MapField) {
 func (v messageFieldsJSONNameVisitor) handleField(field *proto.Field) {
 	var gogoJSONName, jsonName string
 	for _, option := range field.Options {
-		if option.Name == "gogoproto.jsontag" {
-			gogoJSONName = option.Constant.Source
+		if option.Name == "(gogoproto.jsontag)" {
+			if option.Constant.Source != "-" {
+				gogoJSONName = option.Constant.Source
+			}
 		}
 		if option.Name == "json_name" {
 			jsonName = option.Constant.Source
 		}
+	}
+	if strings.Contains(gogoJSONName, ",") {
+		gogoJSONName = strings.Split(gogoJSONName, ",")[0]
 	}
 	if gogoJSONName != "" && gogoJSONName != jsonName {
 		v.AddFailuref(field.Position, `Field %q have different json name gogoproto.jsontag="%s" json_name="%s"`,
