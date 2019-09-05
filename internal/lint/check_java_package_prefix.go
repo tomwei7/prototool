@@ -60,6 +60,8 @@ func (v *fileOptionsJavaPackagePrefixVisitor) Finally() error {
 		}
 	}
 	expect_package := prefix + "." + strings.Replace(filepath.Dir(v.fileName), "/", ".", -1)
+	expect_package = strings.Replace(expect_package, "interface", "interfaces", -1)
+	expect_package = strings.Replace(expect_package, "-", "_", -1)
 	if expect_package != value {
 		v.AddFailuref(v.option.Position, `Expect option "java_package" as: "%s" actual: "%s"`, expect_package, value)
 	}
