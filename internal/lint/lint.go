@@ -137,6 +137,7 @@ var (
 		commentsAllLinter,
 		fileOptionsGoPackagePrefixLinter,
 		importsScopeLinter,
+		fileOptionsJavaPackagePrefixLinter,
 	}
 
 	// DefaultLinters is the slice of default Linters.

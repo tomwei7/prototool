@@ -43,7 +43,6 @@ func (v *fileOptionsGoPackagePrefixVisitor) VisitOption(element *proto.Option) {
 
 func (v *fileOptionsGoPackagePrefixVisitor) Finally() error {
 	if v.option == nil {
-		v.AddFailuref(v.option.Position, `Option "go_package not exists"`)
 		return nil
 	}
 	value := v.option.Constant.Source
