@@ -10,7 +10,7 @@ import (
 	"github.com/uber/prototool/internal/text"
 )
 
-var defaultJavaPackagePrefix = "com.bilibili.bapis"
+var defaultJavaPackagePrefix = "com.bapis"
 
 var fileOptionsJavaPackagePrefixLinter = NewLinter(
 	"FILE_OPTIONS_JAVA_PACKAGE_PREFIX",
@@ -52,7 +52,7 @@ func (v *fileOptionsJavaPackagePrefixVisitor) Finally() error {
 	}
 	ignoredDirs := os.Getenv("PROTO_JAVA_PACKAGE_PREFIX_IGNORED")
 	if ignoredDirs == "" {
-		ignoredDirs = "bilibili,extension,third_party"
+		ignoredDirs = "extension,third_party"
 	}
 	for _, ignored := range strings.Split(ignoredDirs, ",") {
 		if ignored == strings.Split(v.fileName, "/")[0] {
@@ -61,7 +61,7 @@ func (v *fileOptionsJavaPackagePrefixVisitor) Finally() error {
 	}
 	expect_package := prefix + "." + strings.Replace(filepath.Dir(v.fileName), "/", ".", -1)
 	expect_package = strings.Replace(expect_package, "interface", "interfaces", -1)
-	expect_package = strings.Replace(expect_package, "-", "_", -1)
+	expect_package = strings.Replace(expect_package, "-", ".", -1)
 	if expect_package != value {
 		v.AddFailuref(v.option.Position, `Expect option "java_package" as: "%s" actual: "%s"`, expect_package, value)
 	}
