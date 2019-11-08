@@ -52,7 +52,10 @@ func (v *fileOptionsObjcPackagePrefixVisitor) Finally() error {
 		prefix = v
 	}
 	words := strings.Split(filepath.Dir(v.fileName), "/")
-	for _, v := range words {
+	for n, v := range words {
+		if n == 0 {
+			continue
+		}
 		prefix += objcUCFirst(v)
 	}
 	if value != prefix {
